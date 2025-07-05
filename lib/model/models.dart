@@ -4,6 +4,12 @@ class LoginParams {
   LoginParams({required this.email, required this.password});
 }
 
+class RegisterParams {
+  final String email;
+  // final String password;
+  RegisterParams({required this.email});
+}
+
 class LoginResponse {
   final int code;
   final bool data;

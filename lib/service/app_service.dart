@@ -13,6 +13,14 @@ class AppService extends GetxService {
     );
   }
 
+  Future<bool> register(RegisterParams params) async {
+    return Future.delayed(Duration(seconds: 2)).then(
+      (_) => request('assets/mock/login.json').then((data) {
+        return LoginResponse.fromJson(data).data;
+      }),
+    );
+  }
+
   Future<dynamic> request(String path) async {
     return rootBundle.loadString(path).then((data) => json.decode(data));
   }

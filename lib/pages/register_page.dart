@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gmgn/model/models.dart';
 import 'package:gmgn/router/router.dart';
+import 'package:gmgn/service/app_service.dart';
 import 'package:gmgn/utils/app_utils.dart';
 import 'package:gmgn/widget/text_field.dart';
 import 'package:gmgn/widget/toast.dart';
@@ -191,19 +192,29 @@ class RegisterPage extends StatelessWidget {
 class RegisterController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final registerState = LoginOrRegisterState.disable.obs;
+  final service = Get.find<AppService>();
   final pressedState = false.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    emailController.addListener(() {
+      registerState.value = emailController.text.length >= 7
+          ? LoginOrRegisterState.enable
+          : LoginOrRegisterState.disable;
+    });
+  }
+
   void submitEmail(void Function() onEmailError) {
     if (!GetUtils.isEmail(emailController.text)) {
       onEmailError();
       return;
     } else {
       registerState.value = LoginOrRegisterState.loading;
-
-      // service.login(LoginParams(email: emailController.text, password: passwordController.text)).then((login) {
-      //   if (login) {
-      //     Get.back();
-      //   }
-      // });
+      service.register(RegisterParams(email: emailController.text)).then((login) {
+        if (login) {
+          Get.back();
+        }
+      });
     }
   }
 }
